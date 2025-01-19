@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Content Analyzer</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; text-align: center; }
+        input[type="file"] { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Social Media Content Analyzer</h1>
+        <form id="uploadForm">
+            <input type="file" name="file" id="fileInput" required>
+            <button type="submit">Upload and Analyze</button>
+        </form>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        const form = document.getElementById('uploadForm');
+        const output = document.getElementById('output');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            output.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                output.textContent = data.text || data.error;
+            } catch (err) {
+                output.textContent = 'Error occurred while analyzing the file.';
+            }
+        });
+    </script>
+</body>
+</html>
